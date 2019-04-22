@@ -1,11 +1,11 @@
-import pyquil_dbc as QK
+import qiskit_dbc as QK
 import pyquil_dbc as PQ
 
 if __name__ == "__main__":
 
     # initiate an instance of the distance-based classifier
     QK_classifier = QK.QK_DistanceBasedClassifier()
-    PQ_classifier = QK.QK_DistanceBasedClassifier()
+    PQ_classifier = PQ.PQ_DistanceBasedClassifier()
 
     x_prime = [-0.549, 0.836] # x' in publication
     x_double_prime = [0.053 , 0.999] # x'' in publication

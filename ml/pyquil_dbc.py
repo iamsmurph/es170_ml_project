@@ -2,7 +2,7 @@ from pyquil import Program, get_qc
 from pyquil.gates import *
 import numpy as np
 
-class QK_DistanceBasedClassifier:
+class PQ_DistanceBasedClassifier:
 
     def create_circuit(self, angles):
         """
