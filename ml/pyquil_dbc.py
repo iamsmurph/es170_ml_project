@@ -106,6 +106,9 @@ class PQ_DistanceBasedClassifier:
         # Create quantum computer (simulation)
         qc = get_qc('4q-qvm')
 
+        # perhaps another way to do it locally?
+        # qc = get_qc(QPU_LATTICE_NAME, as_qvm=True)
+
         #shown somewhere as a different way
         #qvm = QVMconnection()
 
@@ -113,7 +116,7 @@ class PQ_DistanceBasedClassifier:
         program.wrap_in_numshots_loop(shots=20)
 
         comp = qc.compile(program)
-        # Compile and run the Program
+        # Compile and run the Program (returns a 20 element array of arrays of qubit results)
         results = qc.run(comp)
 
         # retrieve the results from the simulation

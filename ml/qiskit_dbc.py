@@ -199,6 +199,8 @@ class QK_DistanceBasedClassifier:
 
         # simulate and get the results
         result = self.simulate(qc)
+        print('-------------------Debug----------------------')
+        print(result.get_counts(qc))
 
         prob_class0, prob_class1 = self.interpret_results(result.get_counts(qc))
 
