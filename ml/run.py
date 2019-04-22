@@ -1,4 +1,4 @@
-import dbc as QK
+import pyquil_dbc as QK
 import pyquil_dbc as PQ
 
 if __name__ == "__main__":
