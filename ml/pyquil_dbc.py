@@ -119,8 +119,16 @@ class PQ_DistanceBasedClassifier:
         # Compile and run the Program (returns a 20 element array of arrays of qubit results)
         results = qc.run(comp)
 
+        def sort(arr):
+          (uni, counts) = np.unique(arr, axis=0, return_counts = True)
+          a = []
+          for i in range(np.shape(uni)[0]):
+            a.append(''.join(map(str, (uni[i]).tolist())))
+          final = dict(zip(a, counts))
+          return final
+
         # retrieve the results from the simulation
-        return results
+        return sort(results)
 
     def get_angles(self, test_vector, training_vectors):
         """
