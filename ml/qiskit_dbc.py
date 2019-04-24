@@ -162,16 +162,10 @@ class QK_DistanceBasedClassifier:
         # perform the postselection
         postselection = dict(post_select(result_counts))
         postselected_samples = sum(postselection.values())
-        print('-------------------Debug2----------------------')
-        print(postselection)
 
         print(f'Ancilla post-selection probability was found to be {postselected_samples/total_samples}')
 
         retrieve_class = lambda binary_class: [occurences for state, occurences in postselection.items() if state[0] == str(binary_class)]
-
-        print('-------------------Debug3----------------------')
-        print(retrieve_class(0))
-        print(retrieve_class(1))
 
         prob_class0 = sum(retrieve_class(0))/postselected_samples
         prob_class1 = sum(retrieve_class(1))/postselected_samples
@@ -207,8 +201,6 @@ class QK_DistanceBasedClassifier:
 
         # simulate and get the results
         result = self.simulate(qc)
-        print('-------------------Debug1----------------------')
-        print(result.get_counts(qc))
 
         prob_class0, prob_class1 = self.interpret_results(result.get_counts(qc))
 
