@@ -15,16 +15,6 @@ class PQ_DistanceBasedClassifier:
         p = Program()
         ro = p.declare("ro", memory_type='BIT', memory_size=4)
 
-        # name the individual qubits for more clarity
-        # ancilla_qubit = [0]
-        # index_qubit = [1]
-        # data_qubit = [2]
-        # class_qubit = [3]
-
-        #######################################
-        #START of the state preparation routine
-
-        # put the ancilla and the index qubits into uniform superposition
         p += H(0)
         p += H(1)
 
@@ -36,65 +26,37 @@ class PQ_DistanceBasedClassifier:
             program += RZ(0, qubit)
             return program
 
-        # loading the test vector (which we wish to classify)
         p += CNOT(0, 2)
-        p = u3(p, -angles[0], 2)
+        #p = u3(p, -angles[0], 2)
+        p += RY(-angles[0], 2)
         p += CNOT(0, 2)
-        p = u3(p, angles[0], 2)
-
-        # flipping the ancilla qubit > this moves the input vector to the |0> state of the ancilla
+        #p = u3(p, angles[0], 2)
+        p += RY(angles[0], 2)
         p += X(0)
-
-        # loading the first training vector
-        # [0,1] -> class 0
-        # we can load this with a straightforward Toffoli
-
         p += CCNOT(0, 1, 2)
-
-        # flip the index qubit > moves the first training vector to the |0> state of the index qubit
         p += X(1)
-
-        # loading the second training vector
-        # [0.78861, 0.61489] -> class 1
-
         p += CCNOT(0, 1, 2)
-
         p += CNOT(1, 2)
-        p = u3(p, angles[1], 2)
+        #p = u3(p, angles[1], 2)
+        p += RY(angles[1], 2)
         p += CNOT(1, 2)
-        p = u3(p, -angles[1], 2)
-
+        #p = u3(p, -angles[1], 2)
+        p += RY(-angles[1], 2)
         p += CCNOT(0, 1, 2)
-
         p += CNOT(1, 2)
-        p = u3(p, -angles[1], 2)
+        #p = u3(p, -angles[1], 2)
+        p += RY(-angles[1], 2)
         p += CNOT(1, 2)
-        p = u3(p, angles[1], 2)
-
-        # END of state preparation routine
-        ####################################################
-
-        # at this point we would usually swap the data and class qubit
-        # however, we can be lazy and let the Qiskit compiler take care of it
-
-        # flip the class label for training vector #2
-
+        #p = u3(p, angles[1], 2)
+        p += RY(-angles[1], 2)
         p += CNOT(1, 3)
-
-        #############################################
-        # START of the mini distance-based classifier
-
-        # interfere the input vector with the training vectors
         p += H(0)
 
-        # Measure all qubits and record the results in the classical registers
+        # Measure
         p += MEASURE(0, ro[0])
         p += MEASURE(1, ro[1])
         p += MEASURE(2, ro[2])
         p += MEASURE(3, ro[3])
-
-        # END of the mini distance-based classifier
-        #############################################
 
         return p
 
