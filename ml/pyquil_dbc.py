@@ -104,7 +104,7 @@ class PQ_DistanceBasedClassifier:
         on a simulator backend.
         """
         # Create quantum computer (simulation)
-        qc = get_qc('4q-qvm')
+        qc = get_qc('4q-noisy-qvm')
 
         # perhaps another way to do it locally?
         # qc = get_qc(QPU_LATTICE_NAME, as_qvm=True)
