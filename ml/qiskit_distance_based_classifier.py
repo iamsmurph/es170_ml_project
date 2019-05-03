@@ -147,16 +147,14 @@ class DistanceBasedClassifier:
         angles = [] #GIVEN THAT TRAINING DATA POINT SIMILARITY IS BEING DEFINED BY ANGLES, DOES IT MATTER HOW MANY FEATURES THERE ARE?
 
         if test_vector == [-0.549, 0.836]:
-            a = 2*np.arccos(test_vecto[0])
-            angles.append(4.30417579487669/2) #WHAT ANGLES ARE BEING USED HERE? Guess: Radians using dot product between pairs of training points
+            angles.append(4.30417579487669/2)
         elif test_vector == [0.053 , 0.999]:
-            a = 2*np.arccos(test_vector[0])
-            angles.append(3.0357101997648965/2)  #WHY ARE THESE ANGLES BEING DIVIDED BY 2?
+            angles.append(3.0357101997648965/2)
         else:
             print('No angle defined for this test vector.')
 
         if training_vectors[0] == [0, 1] and training_vectors[1] == [0.78861006, 0.61489363]:
-            angles.append(1.3245021469658966/4) #WHY IS THIS ANGLE DIVIDED BY 4?
+            angles.append(1.3245021469658966/4)
         else:
             print('No angles defined for these training vectors.')
 
