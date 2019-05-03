@@ -116,6 +116,9 @@ class PQ_DistanceBasedClassifier:
 
         return angles
 
+    def get_angle_for_vec(self, vec):
+        return float(np.arccos(vec[0]))*2.0
+
     def interpret_results(self, result_counts):
         """
         Post-selecting only the results where
@@ -159,10 +162,17 @@ class PQ_DistanceBasedClassifier:
 
 
         # get the angles needed to load the data into the quantum state
-        angles = self.get_angles(
+
+
+        angles1 = self.get_angles(
                 test_vector=test_vector,
                 training_vectors=training_vectors
         )
+
+        angles = []
+        angles.append(self.get_angle_for_vec(test_vector)/2)
+        angles.append(self.get_angle_for_vec(training_vectors[1])/4)
+        print(angles)
 
         # create the quantum circuit
         program = self.create_circuit(angles=angles)
