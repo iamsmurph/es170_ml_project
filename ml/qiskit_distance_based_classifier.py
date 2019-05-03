@@ -16,6 +16,7 @@ This modern rewrite of the quantum assembly code is meant for educational purpos
 
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
 from qiskit import execute, BasicAer
+import numpy as np
 
 class DistanceBasedClassifier:
 
@@ -79,19 +80,21 @@ class DistanceBasedClassifier:
         # loading the second training vector
         # [0.78861, 0.61489] -> class 1
 
-        qc.ccx(self.ancilla_qubit, self.index_qubit, self.data_qubit)
+        # qc.ccx(self.ancilla_qubit, self.index_qubit, self.data_qubit)
 
-        qc.cx(self.index_qubit, self.data_qubit)
-        qc.u3(angles[1], 0, 0, self.data_qubit)
-        qc.cx(self.index_qubit, self.data_qubit)
-        qc.u3(-angles[1], 0, 0, self.data_qubit)
+        # qc.cx(self.index_qubit, self.data_qubit)
+        # qc.u3(angles[1], 0, 0, self.data_qubit)
+        # qc.cx(self.index_qubit, self.data_qubit)
+        # qc.u3(-angles[1], 0, 0, self.data_qubit)
 
-        qc.ccx(self.ancilla_qubit, self.index_qubit, self.data_qubit)
+        # qc.ccx(self.ancilla_qubit, self.index_qubit, self.data_qubit)
 
-        qc.cx(self.index_qubit, self.data_qubit)
-        qc.u3(-angles[1], 0, 0, self.data_qubit)
-        qc.cx(self.index_qubit, self.data_qubit)
-        qc.u3(angles[1], 0, 0, self.data_qubit)
+        # qc.cx(self.index_qubit, self.data_qubit)
+        # qc.u3(-angles[1], 0, 0, self.data_qubit)
+        # qc.cx(self.index_qubit, self.data_qubit)
+        # qc.u3(angles[1], 0, 0, self.data_qubit)
+
+        self.ccRy(angles[1], qc)
 
         qc.barrier()
 
@@ -121,6 +124,80 @@ class DistanceBasedClassifier:
         #############################################
 
         return qc
+
+    def create_arbitrary_circuit(self, invec, trainvecs):
+    	in_angle = self.get_angle_for_vec(invec)
+    	train_angles = list(map(lambda angle: self.get_angle_for_vec(angle), trainvecs))
+
+    	qc = QuantumCircuit(self.q, self.c)
+
+    	# put the ancilla and the index qubits into uniform superposition
+        qc.h(self.ancilla_qubit)
+        qc.h(self.index_qubit)
+
+        # loading the test vector (which we wish to classify)
+        qc.cx(self.ancilla_qubit, self.data_qubit)
+        qc.u3(-in_angle/2.0, 0, 0, self.data_qubit)
+        qc.cx(self.ancilla_qubit, self.data_qubit)
+        qc.u3(in_angle/2.0, 0, 0, self.data_qubit)
+        qc.barrier()
+
+        # flipping the ancilla qubit > this moves the input vector to the |0> state of the ancilla
+        qc.x(self.ancilla_qubit)
+        qc.barrier()
+
+        # Train vector 1
+        self.ccRy(train_angles[0], qc)
+        qc.barrier()
+        # # flip the index qubit > moves the first training vector to the |0> state of the index qubit
+        # qc.x(self.index_qubit)
+        # qc.barrier()
+
+        # Train vector 2
+        self.ccRy(train_angles[1], qc)
+        qc.barrier()
+
+        # END of state preparation routine
+        ####################################################
+
+        # at this point we would usually swap the data and class qubit
+        # however, we can be lazy and let the Qiskit compiler take care of it
+
+        # flip the class label for training vector #2
+        qc.cx(self.index_qubit, self.class_qubit)
+
+        qc.barrier()
+
+        #############################################
+        # START of the mini distance-based classifier
+
+        # interfere the input vector with the training vectors
+        qc.h(self.ancilla_qubit)
+
+        qc.barrier()
+
+        # Measure all qubits and record the results in the classical registers
+        qc.measure(self.q, self.c)
+
+        # END of the mini distance-based classifier
+        #############################################
+
+        return qc
+
+    def ccRy(self, angle, qc):
+    	qc.ccx(self.ancilla_qubit, self.index_qubit, self.data_qubit)
+
+        qc.cx(self.index_qubit, self.data_qubit)
+        qc.u3(angle/4.0, 0, 0, self.data_qubit)
+        qc.cx(self.index_qubit, self.data_qubit)
+        qc.u3(-angle/4.0, 0, 0, self.data_qubit)
+
+        qc.ccx(self.ancilla_qubit, self.index_qubit, self.data_qubit)
+
+        qc.cx(self.index_qubit, self.data_qubit)
+        qc.u3(-angle/4.0, 0, 0, self.data_qubit)
+        qc.cx(self.index_qubit, self.data_qubit)
+        qc.u3(angle/4.0, 0, 0, self.data_qubit)
 
     def simulate(self, quantum_circuit):
         """
@@ -159,6 +236,9 @@ class DistanceBasedClassifier:
             print('No angles defined for these training vectors.')
 
         return angles
+
+    def get_angle_for_vec(self, vec):
+    	return float(np.arccos(vec[0]))*2.0
 
     def interpret_results(self, result_counts):
         """
@@ -211,7 +291,8 @@ class DistanceBasedClassifier:
         )
 
         # create the quantum circuit
-        qc = self.create_circuit(angles=angles)
+        # qc = self.create_circuit(angles=angles)
+        qc = self.create_arbitrary_circuit(test_vector, training_vectors)
 
         # simulate and get the results
         result = self.simulate(qc)
