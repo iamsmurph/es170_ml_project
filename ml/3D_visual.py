@@ -21,8 +21,6 @@ with open('results.csv') as csv_file:
               x_val = 1 + x_val
 n = x_val
 
-# For each set of style and range settings, plot n random points in the box
-# defined by x in [23, 32], y in [0, 100], z in [zlow, zhigh].
 xs = np.asarray(x_values)
 ys = np.asarray(y_values)
 zs = np.asarray(z_values)
