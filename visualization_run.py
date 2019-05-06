@@ -26,7 +26,7 @@ for i in range(len(testvectors)):
 with open('results.csv', 'w') as csv_file:
     writer = csv.writer(csv_file)
     writer.writerow(('x', 'y', 'label'))
-    for i in range(len(toCSV)):
+    for i in range(len(testvectors)):
         writer.writerow([testvectors[i].get('x'), testvectors[i].get('y'), testvectors[i].get('label')])
 
 rst = pandas.read_csv("results.csv")
