@@ -1,11 +1,9 @@
 import qiskit_dbc as QK
 import pyquil_dbc as PQ
+import vis
 from sklearn.datasets import load_iris
 from sklearn.preprocessing import StandardScaler, normalize
-import pandas as pd
 import numpy as np
-import seaborn as sns; sns.set()
-import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
 
@@ -29,29 +27,25 @@ if __name__ == "__main__":
             results.append(vec)
         return results
 
-    # print([x_prime])
-    # res1 = feed_the_classifier([x_prime], PQ_classifier)
-    # print(res1)
-
-    iris_data = load_iris().data[:3,:2]
-    data = iris_data
-    scalar = StandardScaler()
-    scalar.fit(data)
-    data1 = scalar.transform(data)
-    data2 = np.ndarray.tolist(normalize(data1))
-
-    res = np.asarray(feed_the_classifier(data2, PQ_classifier))
-    print(res)
-
-    for el in res[:, 2]:
+    def get_iris():
+        iris_data = load_iris().data[0:50,:2]
+        data = iris_data
+        scalar = StandardScaler()
+        scalar.fit(iris_data)
+        data1 = scalar.transform(iris_data)
+        ar_data = np.ndarray.tolist(normalize(data1))
+        return ar_data
 
 
-    df  = pd.DataFrame(res, columns = ['x', 'y', 'label'])
-    print(df)
-    # df.plot()  # plots all columns against index
-    sns.relplot(x="x", y="y", hue="label", data=df);
-    # df.plot(kind='density')  # estimate density function
-    plt.show()
+    output = np.asarray(feed_the_classifier(get_iris(), PQ_classifier))
+    print(output)
+
+    visual = vis.Visual()
+    # read = visual.from_file()
+    visual.to_file(output)
+    visual.coloured_scatter(output)
+    visual.dddplot(output)
+
     '''
     print("--------------------- QisKit version ----------------------")
     print(f"Classifying x' = {x_prime} with noisy simulator backend")

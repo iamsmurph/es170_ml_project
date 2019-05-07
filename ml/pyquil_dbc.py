@@ -51,7 +51,7 @@ class PQ_DistanceBasedClassifier:
 
         qc = get_qc('4q-noisy-qvm')
 
-        program.wrap_in_numshots_loop(shots=20)
+        program.wrap_in_numshots_loop(shots=100)
         comp = qc.compile(program)
         results = qc.run(comp)
 
@@ -104,4 +104,4 @@ class PQ_DistanceBasedClassifier:
         elif prob_class0 < prob_class1:
             return 1
         else:
-            return 'inconclusive. 50/50 results'
+            return 2
