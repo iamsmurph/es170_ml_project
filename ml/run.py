@@ -28,23 +28,27 @@ if __name__ == "__main__":
         return results
 
     def get_iris():
-        iris_data = load_iris().data[0:50,:2]
-        data = iris_data
+        iris_data = load_iris().data[0:100,2:4]
+        #iris_data = np.c_[d1, d2]
         scalar = StandardScaler()
         scalar.fit(iris_data)
         data1 = scalar.transform(iris_data)
         ar_data = np.ndarray.tolist(normalize(data1))
         return ar_data
+    def get_iris_label():
+        return load_iris().target[0:100]
 
 
-    output = np.asarray(feed_the_classifier(get_iris(), PQ_classifier))
-    print(output)
-
+    output1 = np.asarray(feed_the_classifier(get_iris(), PQ_classifier))
+    output2 = np.asarray(feed_the_classifier(get_iris(), QK_classifier))
     visual = vis.Visual()
-    # read = visual.from_file()
-    visual.to_file(output)
-    visual.coloured_scatter(output)
-    visual.dddplot(output)
+    #visual.to_file(output)
+    #visual.coloured_scatter(output)
+    visual.dddplot(output1, get_iris_label())
+    visual.dddplot(output2, get_iris_label())
+
+
+
 
     '''
     print("--------------------- QisKit version ----------------------")
@@ -70,4 +74,3 @@ if __name__ == "__main__":
     class_result = PQ_classifier.classify(test_vector=x_double_prime, training_set=training_set)
     print(f"Test vector x' was classified as class {class_result}")
     '''
-
