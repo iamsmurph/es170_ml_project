@@ -11,31 +11,39 @@ class PQ_DistanceBasedClassifier:
 
         p += H(0)
         p += H(1)
+
         p += CNOT(0, 2)
         p += RY(-angles[0], 2)
         p += CNOT(0, 2)
         p += RY(angles[0], 2)
         p += X(0)
+
+        # training 1
         p += CCNOT(0, 1, 2)
         p += X(1)
+
+        # training 2
         p += CCNOT(0, 1, 2)
         p += CNOT(1, 2)
         p += RY(angles[1], 2)
         p += CNOT(1, 2)
         p += RY(-angles[1], 2)
+
         p += CCNOT(0, 1, 2)
         p += CNOT(1, 2)
         p += RY(-angles[1], 2)
         p += CNOT(1, 2)
-        p += RY(-angles[1], 2)
+        p += RY(angles[1], 2)
+
+        # Final Entaglement
         p += CNOT(1, 3)
         p += H(0)
 
         # Measure
         p += MEASURE(0, ro[0])
         p += MEASURE(1, ro[1])
-        p += MEASURE(2, ro[2])
-        p += MEASURE(3, ro[3])
+        p += MEASURE(2, ro[3])
+        p += MEASURE(3, ro[2])
 
         return p
 
