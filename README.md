@@ -1,9 +1,9 @@
 # es170_ml_project
 ES170 Project
 
-Supervised Machine Learning Clustering on MNIST dataset with Rigetti PyQuil and IBM Qiskit
+# Supervised Machine Learning Clustering on MNIST dataset with Rigetti PyQuil and IBM Qiskit
 
-Main Files Contained in ml Folder:
+### Main Files Contained in ml Folder:
 
 PyQuil_DBC.py - Our Pyquil implementation of Schuld's paper
 
