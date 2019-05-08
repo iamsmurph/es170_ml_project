@@ -5,6 +5,7 @@ from sklearn.datasets import load_iris
 from sklearn.preprocessing import StandardScaler, normalize
 import numpy as np
 from copy import deepcopy
+import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
 
@@ -29,7 +30,8 @@ if __name__ == "__main__":
         return results
 
     def get_iris():
-        iris_data = load_iris().data[0:100,2:4]
+        iris_data = np.c_[load_iris().data[0:100,1:2],load_iris().data[0:100,3:4]]
+
         #iris_data = np.c_[d1, d2]
         scalar = StandardScaler()
         scalar.fit(iris_data)
@@ -57,6 +59,7 @@ if __name__ == "__main__":
 
     visual.dddplot(output1, get_iris_label())
     visual.dddplot(output2, get_iris_label())
+    plt.show()
 
     #visual.to_file(output)
     #visual.coloured_scatter(output)

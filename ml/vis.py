@@ -35,5 +35,4 @@ class Visual:
     ax.set_ylabel('Y Coordinate')
     ax.set_zlabel('Class')
 
-    plt.show()
     return ()
