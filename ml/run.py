@@ -52,7 +52,7 @@ if __name__ == "__main__":
     print("Classifying with Rigetti system")
     output1 = np.asarray(feed_the_classifier(get_iris(), PQ_classifier))
 
-    #print("Classifying with IBM system")
+    print("Classifying with IBM system")
     output2 = np.asarray(feed_the_classifier(get_iris(), QK_classifier))
 
     visual.dddplot(output1, get_iris_label())
