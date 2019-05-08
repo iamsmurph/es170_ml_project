@@ -1,5 +1,5 @@
 import qiskit_dbc as QK
-import test2 as PQ
+import pyquil_dbc as PQ
 import vis
 from sklearn.datasets import load_iris
 from sklearn.preprocessing import StandardScaler, normalize
@@ -39,13 +39,13 @@ if __name__ == "__main__":
 
     def get_iris_label():
         return load_iris().target[0:100]
-
+    '''
     a = get_iris()[0:2]
     b = get_iris()[50:52]
     a.append(b[0])
     a.append(b[1])
     c = deepcopy(a)
-
+    '''
 
     visual = vis.Visual()
 
@@ -53,10 +53,10 @@ if __name__ == "__main__":
     output1 = np.asarray(feed_the_classifier(get_iris(), PQ_classifier))
 
     #print("Classifying with IBM system")
-    #output2 = np.asarray(feed_the_classifier(get_iris(), QK_classifier))
+    output2 = np.asarray(feed_the_classifier(get_iris(), QK_classifier))
 
     visual.dddplot(output1, get_iris_label())
-    #visual.dddplot(output2, get_iris_label())
+    visual.dddplot(output2, get_iris_label())
 
     #visual.to_file(output)
     #visual.coloured_scatter(output)

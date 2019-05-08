@@ -57,7 +57,7 @@ class PQ_DistanceBasedClassifier:
           final = dict(zip(a, counts))
           return final
 
-        qc = get_qc('4q-noisy-qvm')
+        qc = get_qc('4q-qvm')
 
         program.wrap_in_numshots_loop(shots=100)
         comp = qc.compile(program)
@@ -108,8 +108,8 @@ class PQ_DistanceBasedClassifier:
         prob_class0, prob_class1 = self.interpret_results(result)
 
         if prob_class0 > prob_class1:
-            return 0
-        elif prob_class0 < prob_class1:
             return 1
+        elif prob_class0 < prob_class1:
+            return 0
         else:
             return 2
