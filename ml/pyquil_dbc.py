@@ -49,6 +49,9 @@ class PQ_DistanceBasedClassifier:
 
     def simulate(self, program):
 
+        # this function takes the pyquil simulation format and reformats into
+        # the style used by qiskit
+
         def sort(arr):
           (uni, counts) = np.unique(arr, axis=0, return_counts = True)
           a = []
@@ -56,9 +59,10 @@ class PQ_DistanceBasedClassifier:
             a.append(''.join(map(str, (uni[i]).tolist())))
           final = dict(zip(a, counts))
           return final
+        # get a simulator here we have a noisy 4 qubit simulator
+        qc = get_qc('4q-noisy-qvm')
 
-        qc = get_qc('4q-qvm')
-
+        # These are the simulation settings
         program.wrap_in_numshots_loop(shots=100)
         comp = qc.compile(program)
         results = qc.run(comp)
@@ -79,16 +83,12 @@ class PQ_DistanceBasedClassifier:
         postselection = dict(post_select(result_counts))
         postselected_samples = sum(postselection.values())
 
-        #print(f'Ancilla post-selection probability was found to be {postselected_samples/total_samples}')
-
+        # reads the first bit, if 1 return 1, else return 0
         retrieve_class = lambda binary_class: [occurences for state, occurences in postselection.items() if state[0] == str(binary_class)]
 
+        # Calculate the number of 1 resutls vs number of 2 resutls
         prob_class0 = sum(retrieve_class(0))/postselected_samples
         prob_class1 = sum(retrieve_class(1))/postselected_samples
-
-        #print(f'Probability for class 0 is {prob_class0}')
-        #print(f'Probability for class 1 is {prob_class1}')
-
         return prob_class0, prob_class1
 
     def classify(self, test_vector, training_set):
@@ -111,5 +111,7 @@ class PQ_DistanceBasedClassifier:
             return 1
         elif prob_class0 < prob_class1:
             return 0
+        # in the unlikely situation that there are exactly as many 1s as 0s
+        # return a value 2, this will be dealt with in the display module
         else:
             return 2

@@ -1,7 +1,11 @@
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
 from qiskit import execute, BasicAer
 import numpy as np
-
+'''
+This Module is exactly like the pyquil dbc_module but with the original qiskit,
+taken from the original repository - changes made to the classify and angles function
+others are largely the same.
+'''
 class QK_DistanceBasedClassifier:
 
     def initialize_registers(self, num_registers):
@@ -72,12 +76,10 @@ class QK_DistanceBasedClassifier:
         postselection = dict(post_select(result_counts))
         postselected_samples = sum(postselection.values())
 
-        # print(f'Ancilla post-selection probability was found to be {postselected_samples/total_samples}')
         retrieve_class = lambda binary_class: [occurences for state, occurences in postselection.items() if state[0] == str(binary_class)]
         prob_class0 = sum(retrieve_class(0))/postselected_samples
         prob_class1 = sum(retrieve_class(1))/postselected_samples
-        # print(f'Probability for class 0 is {prob_class0}')
-        # print(f'Probability for class 1 is {prob_class1}')
+
 
         return prob_class0, prob_class1
 

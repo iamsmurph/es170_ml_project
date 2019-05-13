@@ -4,14 +4,19 @@ import matplotlib.pyplot as plt
 
 class Visual:
 
+  # save files (used for display testing)
   def to_file(self, array):
     c = np.savetxt("results.txt", array)
     return ()
 
+  # read files (used for display testing)
   def from_file(self):
     return np.loadtxt("results.txt")
 
+
   def dddplot(self, data, target):
+
+    # creates vertical seperation for seperate classes
     def make_third(b):
       if b == 0:
         return -10.0
