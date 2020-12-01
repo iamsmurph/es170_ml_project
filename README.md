@@ -1,4 +1,4 @@
-# Supervised Machine Learning Clustering on MNIST dataset with Rigetti PyQuil and IBM Qiskit
+# Supervised Clustering on MNIST dataset with Rigetti PyQuil and IBM Qiskit
 
 ### How to use:
 1. Must have a couple moduels installed: mpl_toolkits.mplot3d, matplotlib.pyplot,
